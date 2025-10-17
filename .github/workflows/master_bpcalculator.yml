@@ -29,6 +29,12 @@ jobs:
       - name: Run Unit Test
         run: dotnet test ./UnitTest/UnitTest.csproj --verbosity normal
 
+      - name: Run PS Test
+        run: dotnet test ./PSTest/PSTest.csproj --verbosity normal
+          
+      - name: Run Page Test
+        run: dotnet test ./PageTest/PageTest.csproj --verbosity normal
+
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 

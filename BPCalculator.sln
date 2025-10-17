@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSTest", "PSTest\PSTest.csproj", "{24E5EC90-812E-49E8-8845-7B4AE5C70113}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PageCodeTest", "PageCodeTest\PageCodeTest.csproj", "{C896DCBB-773E-42B4-9AFC-12A9C8EBD8BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PageTest", "PageTest\PageTest.csproj", "{C896DCBB-773E-42B4-9AFC-12A9C8EBD8BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

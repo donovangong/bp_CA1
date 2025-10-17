@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace PageTest
 {
     [TestClass]
-    public sealed class Page_code_test
+    public sealed class Page_test
     {
         [TestMethod]
         public void TestMethod1()
