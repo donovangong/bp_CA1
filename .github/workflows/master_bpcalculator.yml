@@ -35,6 +35,9 @@ jobs:
       - name: Run Page Test
         run: dotnet test ./PageTest/PageTest.csproj --verbosity normal
 
+      - name: Run BDD Test
+        run: dotnet test ./BDDTest/BDDTest.csproj --no-build --verbosity normal
+
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 

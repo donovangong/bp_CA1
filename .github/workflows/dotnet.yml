@@ -34,6 +34,5 @@ jobs:
     - name: Run Page Test
       run: dotnet test ./PageTest/PageTest.csproj --no-build --verbosity normal
 
-
-
-
+    - name: Run BDD Test
+      run: dotnet test ./BDDTest/BDDTest.csproj --no-build --verbosity normal
