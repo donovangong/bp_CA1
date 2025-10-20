@@ -11,11 +11,16 @@ export let options = {
         "http_req_duration": ["p(95)<300"],
     },
     discardResponseBodies: false,
+  cloud: {
+    projectID: 5190904
+  }
 };
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+
 
 export default function () {
     let res = http.get("https://bpcalculator.azurewebsites.net/", { responseType: "text" });
