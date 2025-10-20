@@ -1,0 +1,23 @@
+name: k6 bp
+
+on:
+  workflow_dispatch:
+
+jobs:
+  k6_load_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Pull Docker image for k6
+      run: docker pull grafana/k6
+
+    - name: Run k6 load test and save report
+      run: docker run -i grafana/k6 run - <k6test/perf1.js > k6report.txt
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: k6report
+        path: k6report.txt
+

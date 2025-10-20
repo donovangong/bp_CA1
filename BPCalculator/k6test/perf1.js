@@ -1,0 +1,41 @@
+﻿import { check, sleep } from "k6";
+import http from "k6/http";
+
+export let options = {
+    stages: [
+        { duration: "1m", target: 20 },
+        { duration: "1m", target: 20 },
+        { duration: "1m", target: 0 },
+    ],
+    thresholds: {
+        "http_req_duration": ["p(95)<300"],
+    },
+    discardResponseBodies: false,
+};
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+export default function () {
+    let res = http.get("https://bpcalculator.azurewebsites.net/", { responseType: "text" });
+
+    check(res, {
+        "GET status 200": (r) => r.status === 200,
+    });
+
+    res = res.submitForm({
+        fields: {
+            Systolic: getRandomInt(90, 180).toString(),
+            Diastolic: getRandomInt(60, 120).toString(),
+            Age: getRandomInt(20, 80).toString(),
+            Gender: "M"
+        },
+    });
+
+    check(res, {
+        "POST status 200": (r) => r.status === 200,
+    });
+
+    sleep(3);
+}
