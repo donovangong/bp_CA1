@@ -1,10 +1,10 @@
 name: k6 bp
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    workflow_run:
+     workflows: ["dotnet","sonarqube"]
+     types:
+      - completed
 
 jobs:
   k6_load_test:
