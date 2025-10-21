@@ -25,14 +25,18 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     
-    - name: Run Unit Test
-      run: dotnet test ./Test/UnitTest/UnitTest.csproj --no-build --verbosity normal
-
-    - name: Run PS Test
-      run: dotnet test ./Test/PSTest/PSTest.csproj --no-build --verbosity normal
-
-    - name: Run Page Test
-      run: dotnet test ./Test/PageTest/PageTest.csproj --no-build --verbosity normal
-
-    - name: Run BDD Test
-      run: dotnet test ./Test/BDDTest/BDDTest.csproj --no-build --verbosity normal
+    - name: Run all tests with coverage
+      run: |
+        dotnet test ./Test/UnitTest/UnitTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
+        dotnet test ./Test/PSTest/PSTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
+        dotnet test ./Test/PageTest/PageTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
+        dotnet test ./Test/BDDTest/BDDTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
+    - name: Convert coverage report to cobertura format
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:"TestResults/CoverageReport"
+    - name: Upload coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: CoverageReport
+        path: TestResults/CoverageReport

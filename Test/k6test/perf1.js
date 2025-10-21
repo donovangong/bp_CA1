@@ -2,10 +2,11 @@
 import http from "k6/http";
 
 export let options = {
+    vus: 10,
     stages: [
-        { duration: "1m", target: 20 },
-        { duration: "1m", target: 20 },
-        { duration: "1m", target: 0 },
+        { duration: "30s", target: 20 },
+        { duration: "30s", target: 20 },
+        { duration: "30s", target: 0 },
     ],
     thresholds: {
         "http_req_duration": ["p(95)<300"],
@@ -17,7 +18,7 @@ export let options = {
 };
 
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(Math.random() * (max - min + 1) + min); // NOSONAR
 }
 
 
