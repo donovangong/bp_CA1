@@ -23,12 +23,17 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     
-    - name: Run all tests with coverage
-      run: |
-        dotnet test ./Test/UnitTest/UnitTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
-        dotnet test ./Test/PSTest/PSTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
-        dotnet test ./Test/PageTest/PageTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
-        dotnet test ./Test/BDDTest/BDDTest.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults --no-build --verbosity normal
+    - name: Run Unit Test
+      run: dotnet test ./Test/UnitTest/UnitTest.csproj --no-build --verbosity normal
+
+    - name: Run PS Test
+      run: dotnet test ./Test/PSTest/PSTest.csproj --no-build --verbosity normal
+
+    - name: Run Page Test
+      run: dotnet test ./Test/PageTest/PageTest.csproj --no-build --verbosity normal
+
+    - name: Run BDD Test
+      run: dotnet test ./Test/BDDTest/BDDTest.csproj --no-build --verbosity normal
 
     - name: Upload raw coverage results
       uses: actions/upload-artifact@v4
