@@ -86,9 +86,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
+          $env:SONAR_SCANNER_OPTS="-X"
           $coveragePath = (Get-ChildItem -Path "TestResults" -Recurse -Filter "coverage.cobertura.xml" | Select-Object -First 1).FullName
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"donovangong_bp" /o:"donovangong" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="$coveragePath"
+          echo "Found coverage file: $coveragePath"
+          
+          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"donovangong_bp" /o:"donovangong" /d:sonar.verbose=true /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="$coveragePath"
           dotnet build
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.verbose=true /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
 
