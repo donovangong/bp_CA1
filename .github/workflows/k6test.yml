@@ -2,9 +2,9 @@ name: k6 bp
 
 on:
     workflow_run:
-     workflows: ["dotnet"]
-     types:
-      - completed
+      workflows: ["dotnet"]
+      types:
+       - completed
 
 jobs:
   k6_load_test:
