@@ -86,12 +86,25 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          $env:SONAR_SCANNER_OPTS="-X"
-          $coverageFiles = Get-ChildItem -Path "TestResults" -Recurse -Filter "coverage.cobertura.xml" | ForEach-Object { $_.FullName }
-          $coveragePaths = [string]::Join(",", $coverageFiles)
-          echo "Found coverage files: $coveragePaths"
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"donovangong_bp" /o:"donovangong" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.verbose=true /d:sonar.coverageReportPaths="$coveragePaths"
+          $coveragePaths = @(
+              ".\Test\UnitTest\TestResults\*\coverage.cobertura.xml",
+              ".\Test\PSTest\TestResults\*\coverage.cobertura.xml",
+              ".\Test\PageTest\TestResults\*\coverage.cobertura.xml",
+              ".\Test\BDDTest\TestResults\*\coverage.cobertura.xml"
+          ) -join ","
+          
+          Write-Host "Coverage paths: $coveragePaths"
+          
+          $beginCmd = "${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:`"donovangong_bp`" /o:`"donovangong`" /d:sonar.token=`"${{ secrets.SONAR_TOKEN }}`" /d:sonar.cs.vscoveragexml.reportsPaths=`"$coveragePaths`""
+          Write-Host $beginCmd
+          iex $beginCmd
+      
+          # Build the solution
           dotnet build
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      
+          # End analysis (only token)
+          $endCmd = "${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token=`"${{ secrets.SONAR_TOKEN }}`""
+          Write-Host $endCmd
+          iex $endCmd
 
 
