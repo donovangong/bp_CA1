@@ -1,9 +1,9 @@
 name: SonarQube
 on:
-   workflow_run:
-     workflows: ["dotnet"]
-     types:
-      - completed
+  workflow_run:
+    workflows: ["dotnet"]
+      types:
+        - completed
     
 jobs:
   build:
