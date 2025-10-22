@@ -28,14 +28,13 @@ jobs:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-          
+
       - name: Install Coverlet Collector
         run: |
-          dotnet test ./Test/UnitTest/UnitTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/UnitTest/coverage.xml /p:CoverletOutputFormat=cobertura
-          dotnet test ./Test/PSTest/PSTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/PSTest/coverage.xml /p:CoverletOutputFormat=cobertura
-          dotnet test ./Test/PageTest/PageTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/PageTest/coverage.xml /p:CoverletOutputFormat=cobertura
-          dotnet test ./Test/BDDTest/BDDTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/BDDTest/coverage.xml /p:CoverletOutputFormat=cobertura
-
+           dotnet add ./Test/UnitTest/UnitTest.csproj package coverlet.collector
+           dotnet add ./Test/PSTest/PSTest.csproj package coverlet.collector
+           dotnet add ./Test/PageTest/PageTest.csproj package coverlet.collector
+           dotnet add ./Test/BDDTest/BDDTest.csproj package coverlet.collector
       
       - name: Cache SonarQube Cloud scanner
         id: cache-sonar-scanner
@@ -57,10 +56,11 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          dotnet test ./Test/UnitTest/UnitTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-          dotnet test ./Test/PSTest/PSTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-          dotnet test ./Test/PageTest/PageTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-          dotnet test ./Test/BDDTest/BDDTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
+            dotnet test ./Test/UnitTest/UnitTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/UnitTest/coverage.xml /p:CoverletOutputFormat=cobertura
+            dotnet test ./Test/PSTest/PSTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/PSTest/coverage.xml /p:CoverletOutputFormat=cobertura
+            dotnet test ./Test/PageTest/PageTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/PageTest/coverage.xml /p:CoverletOutputFormat=cobertura
+            dotnet test ./Test/BDDTest/BDDTest.csproj --no-build /p:CollectCoverage=true /p:CoverletOutput=./TestResults/BDDTest/coverage.xml /p:CoverletOutputFormat=cobertura
+
       
       - name: Build and analyze
         env:
