@@ -2,7 +2,7 @@ name: k6 bp
 
 on:
    workflow_run:
-     workflows: ["dotnet"]
+     workflows: dotnet
      types:
       - completed
 
