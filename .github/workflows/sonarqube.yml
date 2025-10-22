@@ -87,11 +87,11 @@ jobs:
         shell: powershell
         run: |
           $env:SONAR_SCANNER_OPTS="-X"
-          $coveragePath = (Get-ChildItem -Path "TestResults" -Recurse -Filter "coverage.cobertura.xml" | Select-Object -First 1).FullName
-          echo "Found coverage file: $coveragePath"
-          
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"donovangong_bp" /o:"donovangong" /d:sonar.verbose=true /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.coverageReportPaths="$coveragePath"
+          $coverageFiles = Get-ChildItem -Path "TestResults" -Recurse -Filter "coverage.cobertura.xml" | ForEach-Object { $_.FullName }
+          $coveragePaths = [string]::Join(",", $coverageFiles)
+          echo "Found coverage files: $coveragePaths"
+          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"donovangong_bp" /o:"donovangong" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.verbose=true /d:sonar.coverageReportPaths="$coveragePaths"
           dotnet build
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.verbose=true /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
 
