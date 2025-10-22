@@ -23,7 +23,7 @@ jobs:
         Write-Host "COVERAGE_FILES=$coverageFilesString" >> $env:GITHUB_ENV
 
     - name: SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@v4.1.0
+      uses: SonarSource/sonarqube-scan-action@v6.0.0
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_SCANNER_OPTS: /d:sonar.cs.opencover.reportsPaths=${{ env.COVERAGE_FILES }}
