@@ -56,10 +56,10 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-           dotnet test ./Test/UnitTest/UnitTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-           dotnet test ./Test/PSTest/PSTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-           dotnet test ./Test/PageTest/PageTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-           dotnet test ./Test/BDDTest/BDDTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
+           dotnet test ./Test/UnitTest/UnitTest.csproj  /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory TestResults
+           dotnet test ./Test/PSTest/PSTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory TestResults
+           dotnet test ./Test/PageTest/PageTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory TestResults
+           dotnet test ./Test/BDDTest/BDDTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory TestResults
 
       - name: Debug show TestResults folder
         shell: powershell
