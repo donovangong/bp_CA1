@@ -66,10 +66,19 @@ jobs:
         run: |
           Write-Host "Current directory:"
           Get-Location
-          Write-Host "List top-level files:"
-          Get-ChildItem
-          Write-Host "List TestResults folder recursively:"
-          Get-ChildItem TestResults -Recurse
+      
+          Write-Host "`nTop-level files/folders:"
+          Get-ChildItem -Force
+      
+          Write-Host "`nList all files recursively under TestResults:"
+          $testResults = Get-ChildItem -Path TestResults -Recurse -File
+          if ($testResults) {
+              $testResults | ForEach-Object {
+                  Write-Host $_.FullName
+              }
+          } else {
+              Write-Host "No files found under TestResults"
+          }
 
       
       - name: Build and analyze
