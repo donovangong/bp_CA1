@@ -22,6 +22,13 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+
+    - name: Install Coverlet Collector
+      run: |
+        dotnet add ./Test/UnitTest/UnitTest.csproj package coverlet.collector
+        dotnet add ./Test/PSTest/PSTest.csproj package coverlet.collector
+        dotnet add ./Test/PageTest/PageTest.csproj package coverlet.collector
+        dotnet add ./Test/BDDTest/BDDTest.csproj package coverlet.collector
     
     - name: Clean old test results
       run: rm -rf TestResults || true
@@ -51,5 +58,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: CoverageReport
-        path: TestResults/*/*
+        path: TestResults/**/*
 
