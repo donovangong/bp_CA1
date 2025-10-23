@@ -9,16 +9,19 @@ jobs:
   dotnet:
     name: Build & Test 
     uses: ./.github/workflows/dotnet.yml
+    secrets: inherit
 
   sonarqube_check:
     name: sonarqube quality check
     needs: dotnet
     uses: ./.github/workflows/sonarqube.yml
+    secrets: inherit
 
   k6_check:
     name: k6 performance checks
     needs: dotnet
     uses: ./.github/workflows/k6test.yml
+    secrets: inherit
 
   deploy:
     name: Deploy to Cloud
@@ -27,4 +30,5 @@ jobs:
       id-token: write
       contents: read
     uses: ./.github/workflows/deploy_cloud.yml
+    secrets: inherit
 
