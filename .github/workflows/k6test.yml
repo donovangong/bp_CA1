@@ -5,6 +5,8 @@ on:
      workflows: dotnet
      types:
       - completed
+     braches:
+      - master   
    workflow_dispatch: 
 
 jobs:

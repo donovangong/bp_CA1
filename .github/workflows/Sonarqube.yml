@@ -1,9 +1,11 @@
 on:
-  push:
+  workflow_run:
+    workflows: [dotnet]
+    types:
+     - completed
     branches:
-      - master
-  pull_request:
-      types: [opened, synchronize, reopened]
+     - master
+  workflow_dispatch:
 
 name: SonarQ
 jobs:
