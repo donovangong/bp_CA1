@@ -10,18 +10,18 @@ jobs:
     name: Build & Test 
     uses: ./.github/workflows/dotnet.yml
 
-  quality_and_perf:
-    name: Quality + Performance Checks
+  sonarqube_check:
+    name: sonarqube quality check
     needs: dotnet
-    strategy:
-      matrix:
-        include:
-          - workflow: sonarqube.yml
-          - workflow: k6test.yml
-    uses: ./.github/workflows/${{ matrix.workflow }}
+    uses: ./.github/workflows/sonarqube.yml
+
+  k6_check:
+    name: k6 performance checks
+    needs: dotnet
+    uses: ./.github/workflows/k6test.yml
 
   deploy:
     name: Deploy to Cloud
-    needs: quality_and_perf
+    needs: [sonarqube_check,k6_check]
     uses: ./.github/workflows/deploy_cloud.yml
 
