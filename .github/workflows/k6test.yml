@@ -1,4 +1,4 @@
-name: k6 bp
+name: 2 - k6 test
 
 on:
   workflow_dispatch:
