@@ -8,19 +8,19 @@ on:
 jobs:
   dotnet:
     name: Build & Test 
-    uses: ./.github/workflows/dotnet.yml
+    uses: ./.github/workflows/1_dotnet.yml
     secrets: inherit
 
   sonarqube_check:
     name: Sonarqube Test
     needs: dotnet
-    uses: ./.github/workflows/sonarqube.yml
+    uses: ./.github/workflows/2_sonarqube.yml
     secrets: inherit
 
   k6_check:
     name: K6 Performance Test
     needs: dotnet
-    uses: ./.github/workflows/k6test.yml
+    uses: ./.github/workflows/2_k6test.yml
     secrets: inherit
 
   test_deploy:
@@ -29,13 +29,13 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    uses: ./.github/workflows/deploy_test.yml
+    uses: ./.github/workflows/4_deploy_test.yml
     secrets: inherit
 
   e2e_check:
     name: E2e UI Test
     needs: test_deploy
-    uses: ./.github/workflows/playwright.yml
+    uses: ./.github/workflows/5_playwright.yml
     secrets: inherit
     
   official_deploy:
@@ -44,5 +44,5 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    uses: ./.github/workflows/deploy_cloud.yml
+    uses: ./.github/workflows/6_deploy_cloud.yml
     secrets: inherit
