@@ -32,3 +32,8 @@ jobs:
     uses: ./.github/workflows/deploy_cloud.yml
     secrets: inherit
 
+  e2e_check:
+    name: e2e UI checks
+    needs: deploy
+    uses: ./.github/workflows/playwright.yml
+    secrets: inherit
