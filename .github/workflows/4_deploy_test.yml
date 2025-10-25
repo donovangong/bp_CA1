@@ -37,13 +37,13 @@ jobs:
         run: dotnet test ./Test/BDDTest/BDDTest.csproj --no-build --verbosity normal
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish D:\a\bp\bp\BPCalculator\BPCalculator.csproj -c Release -o ./publish
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app-test
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -70,8 +70,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'BPCalculatortest'
-          slot-name: 'Production'
-          package: .
+          package: ./
 
           
 
