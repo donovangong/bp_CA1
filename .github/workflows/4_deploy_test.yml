@@ -49,8 +49,8 @@ jobs:
     runs-on: windows-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read 
 
     steps:
       - name: Download artifact from build job
@@ -64,11 +64,6 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_059BE7A1087A4B8DBAD903CAEC617130 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3CCA1FE6F9F7434684ACCF6F4DC0A451 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A4206752A52D4A7A952EFFBBB528D357 }}
-
-      - name: Clean up old deployment files
-        run: |
-          echo "Cleaning up old temp folders..."
-          az webapp ssh --resource-group tu_csd_test --name BPCalculatortest --command "powershell -Command 'Remove-Item -Path D:\home\data\* -Recurse -Force; Remove-Item -Path D:\home\site\temp\* -Recurse -Force'"
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
