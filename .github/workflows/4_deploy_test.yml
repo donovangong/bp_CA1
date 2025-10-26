@@ -65,11 +65,19 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3CCA1FE6F9F7434684ACCF6F4DC0A451 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A4206752A52D4A7A952EFFBBB528D357 }}
 
-      - name: Clean up zipdeploy via Kudu API
+      - name: Clean Azure Web App temp directories via Kudu API
         run: |
-         $AZURE_ACCESS_TOKEN=$(az account get-access-token --resource https://management.azure.com --query accessToken -o tsv)
-         curl "https://bpcalculatortest-crdjejebh3dyazgq.francecentral-01.azurewebsites.net/api/command" -Method POST -Headers @{Authorization="Bearer $AZURE_ACCESS_TOKEN"; "Content-Type"="application/json"} -Body '{"command":"cmd /c rmdir /s /q D:\\local\\Temp\\zipdeploy && mkdir D:\\local\\Temp\\zipdeploy"}'
-
+          $AZURE_ACCESS_TOKEN = az account get-access-token --resource https://management.azure.com --query accessToken -o tsv
+          curl "https://bpcalculatortest-crdjejebh3dyazgq.francecentral-01.azurewebsites.net/api/command" `
+               -Method POST `
+               -Headers @{Authorization="Bearer $AZURE_ACCESS_TOKEN"; "Content-Type"="application/json"} `
+               -Body '{"command":"cmd /c rmdir /s /q D:\\local\\Temp\\zipdeploy && mkdir D:\\local\\Temp\\zipdeploy"}'
+          curl "https://bpcalculatortest-crdjejebh3dyazgq.francecentral-01.azurewebsites.net/api/command" `
+               -Method POST `
+               -Headers @{Authorization="Bearer $AZURE_ACCESS_TOKEN"; "Content-Type"="application/json"} `
+               -Body '{"command":"cmd /c rmdir /s /q D:\\home\\data && mkdir D:\\home\\data"}'
+        shell: pwsh
+  
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
