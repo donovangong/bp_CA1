@@ -25,7 +25,7 @@ jobs:
 
   test_deploy:
     name: 3_Test Env Deploy
-    needs: sonarqube_check
+    needs: [sonarqube_check,dependency_check]
     permissions:
       id-token: write
       contents: read
