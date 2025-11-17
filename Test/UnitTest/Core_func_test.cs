@@ -1,9 +1,10 @@
-﻿using BPCalculator;
+using BPCalculator;
 using System.ComponentModel.DataAnnotations;
 
 namespace UnitTest
 {
     [TestClass]
+    [DoNotParallelize]
     public sealed class Core_func_test
     {
         [TestMethod]
@@ -55,5 +56,52 @@ namespace UnitTest
             Assert.IsFalse(valid);
 
         }
+
+        [TestMethod]
+        public void AddToHistory_StoresValuesCorrectly()
+        {
+            BloodPressure.History.Clear();
+            
+            var bp = new BloodPressure { Systolic = 120, Diastolic = 70 };
+            bp.AddToHistory();
+
+            Assert.AreEqual(1, BloodPressure.History.Count);
+            Assert.AreEqual(120, BloodPressure.History.Peek().Systolic);
+            Assert.AreEqual(70, BloodPressure.History.Peek().Diastolic);
+        }
+
+        [TestMethod]
+        public void SysSeries_And_DiaSeries_ReturnCorrectData()
+        {
+            BloodPressure.History.Clear();
+            
+            new BloodPressure { Systolic = 100, Diastolic = 60 }.AddToHistory();
+            new BloodPressure { Systolic = 110, Diastolic = 70 }.AddToHistory();
+
+            var sys = BloodPressure.SysSeries;
+            var dia = BloodPressure.DiaSeries;
+
+            CollectionAssert.AreEqual(new[] { 100, 110 }, sys);
+            CollectionAssert.AreEqual(new[] { 60, 70 }, dia);
+        }
+
+        [TestMethod]
+        public void History_DoesNotExceedTenItems()
+        {
+            BloodPressure.History.Clear();
+            for (int i = 0; i < 12; i++)
+            {
+                new BloodPressure { Systolic = 100 + i, Diastolic = 60 + i }.AddToHistory();
+            }
+
+            Assert.AreEqual(10, BloodPressure.History.Count);
+
+            // First two records dropped
+            Assert.AreEqual(102, BloodPressure.History.Peek().Systolic);
+            Assert.AreEqual(62, BloodPressure.History.Peek().Diastolic);
+        }
+
+
+
     }
 }
