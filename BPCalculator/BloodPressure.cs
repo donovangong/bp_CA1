@@ -1,16 +1,17 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BPCalculator
 {
     // BP categories
     public enum BPCategory
     {
-        [Display(Name="Low Blood Pressure")] Low,
-        [Display(Name="Ideal Blood Pressure")]  Ideal,
-        [Display(Name="Pre-High Blood Pressure")] PreHigh,
-        [Display(Name ="High Blood Pressure")]  High
+        [Display(Name = "Low Blood Pressure")] Low,
+        [Display(Name = "Ideal Blood Pressure")] Ideal,
+        [Display(Name = "Pre-High Blood Pressure")] PreHigh,
+        [Display(Name = "High Blood Pressure")] High
     };
 
     public class BloodPressure
@@ -21,12 +22,12 @@ namespace BPCalculator
         public const int DiastolicMax = 100;
 
         [Range(SystolicMin, SystolicMax, ErrorMessage = "Invalid Systolic Value")]
-        public int Systolic { get; set; }                       // mmHG
+        public int Systolic { get; set; }   // mmHG
 
         [Range(DiastolicMin, DiastolicMax, ErrorMessage = "Invalid Diastolic Value")]
-        public int Diastolic { get; set; }                      // mmHG
+        public int Diastolic { get; set; }  // mmHG
 
-        // calculate BP category
+        // ===== BP category =====
         public BPCategory Category
         {
             get
@@ -41,5 +42,26 @@ namespace BPCalculator
                     return BPCategory.High;
             }
         }
+
+        // ===== HISTORY (last 10 readings) =====
+        public static Queue<BloodPressure> History { get; } = new();
+
+        public void AddToHistory()
+        {
+            if (History.Count == 10)
+                History.Dequeue();
+
+            History.Enqueue(new BloodPressure
+            {
+                Systolic = this.Systolic,
+                Diastolic = this.Diastolic
+            });
+        }
+
+        public static int[] SysSeries =>
+            History.Select(h => h.Systolic).ToArray();
+
+        public static int[] DiaSeries =>
+            History.Select(h => h.Diastolic).ToArray();
     }
 }
