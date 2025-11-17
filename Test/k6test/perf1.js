@@ -22,25 +22,19 @@ function getRandomInt(min, max) {
 }
 
 export default function () {
-
     const url = "https://bpcalculatortest-crdjejebh3dyazgq.francecentral-01.azurewebsites.net";
 
-    let res = http.get(url, { responseType: "text" });
-
-    check(res, {
-        "GET status 200": (r) => r.status === 200,
+    check(http.get(url), {
+        "GET200": r => r.status === 200,
     });
 
-    res = res.submitForm({
-        fields: {
+    check(
+        http.post(url, {
             "BP.Systolic": getRandomInt(90, 180).toString(),
-            "BP.Diastolic": getRandomInt(60, 120).toString(),
-        },
-    });
+            "BP.Diastolic": getRandomInt(60, 120).toString()
+        }),
+        { "POST200": r => r.status === 200 }
+    );
 
-    check(res, {
-        "POST status 200": (r) => r.status === 200,
-    });
-
-    sleep(3);
+    sleep(1);
 }
