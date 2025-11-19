@@ -1,6 +1,7 @@
 param appName string
 param location string = resourceGroup().location
 
+/*
 resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: 'BPPlan'
   location: location
@@ -13,6 +14,11 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   properties: {
     reserved: false
   }
+}
+*/
+
+resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
+  name: 'BPPlan'
 }
 
 resource webApp 'Microsoft.Web/sites@2023-12-01' = {
