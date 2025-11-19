@@ -38,10 +38,10 @@ jobs:
   
       - name: Deploy IaC (Bicep)
         run: |
-          az deployment group create `
-            --resource-group TU_CSD_test `
-            --template-file ./deploy/deploy_test.bicep `
-            --parameters sites_BPCalculatortest_name="BPCalculatortest"
+            az deployment group create `
+              --resource-group TU_CSD_test `
+              --template-file ./deploy/deploy_test.bicep `
+              --parameters appName="BPCalculatortest"
 
 
       - name: Deploy app package
