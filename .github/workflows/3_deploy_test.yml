@@ -39,16 +39,18 @@ jobs:
       - name: Deploy IaC (Bicep)
         run: |
           az group create -n bp-rg -l westeurope
-          az deployment group create \
-            --resource-group bp-rg \
-            --template-file repo/deploy/deploy_test.bicep \
+          az deployment group create `
+            --resource-group bp-rg `
+            --template-file repo/deploy/deploy_test.bicep `
             --parameters appName="BPCalculatortest"
+
 
       - name: Deploy app package
         run: |
-          az webapp deploy \
-            --resource-group bp-rg \
-            --name BPCalculatortest \
+          az webapp deploy `
+            --resource-group bp-rg `
+            --name BPCalculatortest `
             --src-path ./published-app
+
           
 
