@@ -21,19 +21,9 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
   name: 'BPPlan'
 }
 
-resource webApp 'Microsoft.Web/sites@2023-12-01' = {
+resource webApp 'Microsoft.Web/sites@2023-12-01' existing = {
   name: appName
-  location: location
-  properties: {
-    serverFarmId: appServicePlan.id
-    siteConfig: {
-      netFrameworkVersion: 'v8.0'
-      windowsFxVersion: null
-      linuxFxVersion: null
-    }
-  }
 }
 
 output webAppName string = webApp.name
 output appServicePlanName string = appServicePlan.name
-
