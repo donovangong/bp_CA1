@@ -41,7 +41,7 @@ jobs:
           az group create -n bp-rg -l westeurope
           az deployment group create `
             --resource-group bp-rg `
-            --template-file repo/deploy/deploy_test.bicep `
+            --template-file ./deploy/deploy_test.bicep `
             --parameters appName="BPCalculatortest"
 
 
