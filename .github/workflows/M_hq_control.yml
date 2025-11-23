@@ -52,7 +52,7 @@ jobs:
 
   official_deploy:
     name: 6_Official Env Deploy
-    needs: pen_check
+    needs: k6_check
     permissions:
       id-token: write
       contents: read
