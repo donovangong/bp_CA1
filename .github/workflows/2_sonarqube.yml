@@ -10,15 +10,26 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        
-    - name: Run tests with coverage
+
+    - name: Install coverlet
+      run: dotnet tool install -g coverlet.console
+
+    - name: Build
+      run: dotnet build
+
+    - name: Generate coverage
       run: |
-        dotnet test ./Test/UnitTest/UnitTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-        dotnet test ./Test/SmokeTest/Smoke_Test.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-        dotnet test ./Test/PageTest/PageTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-        dotnet test ./Test/BDDTest/BDDTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
+        coverlet ./Test/UnitTest/bin/Debug/net9.0/UnitTest.dll --target "dotnet" --targetargs "test --no-build" -f opencover -o UnitTest.xml
+        coverlet ./Test/SmokeTest/bin/Debug/net9.0/Smoke_Test.dll --target "dotnet" --targetargs "test --no-build" -f opencover -o SmokeTest.xml
+        coverlet ./Test/PageTest/bin/Debug/net9.0/PageTest.dll --target "dotnet" --targetargs "test --no-build" -f opencover -o PageTest.xml
+        coverlet ./Test/BDDTest/bin/Debug/net9.0/BDDTest.dll --target "dotnet" --targetargs "test --no-build" -f opencover -o BDDTest.xml
 
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v6.0.0
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.cs.opencover.reportsPaths=UnitTest.xml,SmokeTest.xml,PageTest.xml,BDDTest.xml
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
