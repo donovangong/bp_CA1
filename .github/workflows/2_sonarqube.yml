@@ -14,8 +14,12 @@ jobs:
     - name: Install coverlet
       run: dotnet tool install -g coverlet.console
 
-    - name: Build
-      run: dotnet build
+    - name: Build test projects
+      run: |
+        dotnet build ./Test/UnitTest/UnitTest.csproj
+        dotnet build ./Test/SmokeTest/Smoke_Test.csproj
+        dotnet build ./Test/PageTest/PageTest.csproj
+        dotnet build ./Test/BDDTest/BDDTest.csproj
 
     - name: Generate coverage
       run: |
@@ -31,5 +35,3 @@ jobs:
       with:
         args: >
           -Dsonar.cs.opencover.reportsPaths=UnitTest.xml,SmokeTest.xml,PageTest.xml,BDDTest.xml
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
