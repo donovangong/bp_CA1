@@ -13,11 +13,12 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install reportgenerator
-      run: dotnet tool install -g dotnet-reportgenerator-globaltool
-
-    - name: Install XPlat Code Coverage Collector
-      run: dotnet tool install --global dotnet-coverage
+    - name: Add coverlet collector
+      run: |
+        dotnet add ./Test/UnitTest/UnitTest.csproj package coverlet.collector
+        dotnet add ./Test/SmokeTest/Smoke_Test.csproj package coverlet.collector
+        dotnet add ./Test/PageTest/PageTest.csproj package coverlet.collector
+        dotnet add ./Test/BDDTest/BDDTest.csproj package coverlet.collector
 
     - name: Run tests with coverage
       run: |
@@ -26,10 +27,10 @@ jobs:
         dotnet test ./Test/PageTest/PageTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
         dotnet test ./Test/BDDTest/BDDTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
 
-        reportgenerator \
-          -reports:TestResults/**/coverage.cobertura.xml \
-          -targetdir:coveragereport \
-          -reporttypes:SonarQube
+    - name: Convert coverage for SonarQube
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:SonarQube
 
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v6.0.0
