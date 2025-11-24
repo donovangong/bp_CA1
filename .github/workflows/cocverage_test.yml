@@ -16,6 +16,9 @@ jobs:
     - name: Install reportgenerator
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
+    - name: Install XPlat Code Coverage Collector
+      run: dotnet tool install --global dotnet-coverage
+
     - name: Run tests with coverage
       run: |
         dotnet test ./Test/UnitTest/UnitTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
