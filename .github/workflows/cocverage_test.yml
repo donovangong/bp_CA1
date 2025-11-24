@@ -13,24 +13,29 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Add coverlet collector
-      run: |
-        dotnet add ./Test/UnitTest/UnitTest.csproj package coverlet.collector
-        dotnet add ./Test/SmokeTest/Smoke_Test.csproj package coverlet.collector
-        dotnet add ./Test/PageTest/PageTest.csproj package coverlet.collector
-        dotnet add ./Test/BDDTest/BDDTest.csproj package coverlet.collector
+    - name: Install coverlet
+      run: dotnet tool install -g coverlet.console
 
-    - name: Run tests with coverage
-      run: |
-        dotnet test ./Test/UnitTest/UnitTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-        dotnet test ./Test/SmokeTest/Smoke_Test.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-        dotnet test ./Test/PageTest/PageTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
-        dotnet test ./Test/BDDTest/BDDTest.csproj --collect:"XPlat Code Coverage" --results-directory TestResults
+    - name: Build
+      run: dotnet build
 
-    - name: Convert coverage for SonarQube
+    - name: Generate coverage
       run: |
-        dotnet tool install -g dotnet-reportgenerator-globaltool
-        reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:SonarQube
+        coverlet ./Test/UnitTest/bin/Debug/net9.0/UnitTest.dll \
+          --target "dotnet" --targetargs "test --no-build" \
+          -f opencover -o UnitTest.xml
+
+        coverlet ./Test/SmokeTest/bin/Debug/net9.0/Smoke_Test.dll \
+          --target "dotnet" --targetargs "test --no-build" \
+          -f opencover -o SmokeTest.xml
+
+        coverlet ./Test/PageTest/bin/Debug/net9.0/PageTest.dll \
+          --target "dotnet" --targetargs "test --no-build" \
+          -f opencover -o PageTest.xml
+
+        coverlet ./Test/BDDTest/bin/Debug/net9.0/BDDTest.dll \
+          --target "dotnet" --targetargs "test --no-build" \
+          -f opencover -o BDDTest.xml
 
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v6.0.0
@@ -38,4 +43,4 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         args: >
-          -Dsonar.cs.coverageReportPaths=coveragereport/SonarQube.xml
+          -Dsonar.cs.opencover.reportsPaths=UnitTest.xml,SmokeTest.xml,PageTest.xml,BDDTest.xml
