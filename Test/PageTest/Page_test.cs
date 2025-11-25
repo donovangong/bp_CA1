@@ -26,6 +26,12 @@ namespace PageTest
             var error = new ErrorModel(new LoggerFactory().CreateLogger<ErrorModel>());
             error.PageContext = new PageContext { HttpContext = new DefaultHttpContext() };
             error.OnGet();
+
+            // Covers invalid logic branch
+            indexPage.BP.Systolic = 80;
+            indexPage.BP.Diastolic = 90;
+            indexPage.OnPost();
+            Assert.IsFalse(indexPage.ModelState.IsValid);
         }
     }
 }

@@ -1,4 +1,5 @@
 using BPCalculator;
+using BPCalculator.Pages;
 using System.ComponentModel.DataAnnotations;
 
 namespace UnitTest

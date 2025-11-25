@@ -46,9 +46,6 @@ namespace BPCalculator
         public void AddToHistory()
         {
 
-            if (this == null)
-                return;
-
             if (History.Count == 10)
                 History.Dequeue();
 
