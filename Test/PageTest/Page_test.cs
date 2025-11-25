@@ -1,8 +1,11 @@
-﻿using BPCalculator.Pages;
+﻿using BPCalculator;
+using BPCalculator.Pages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.AspNetCore.Hosting;
 
 namespace PageTest
 {
@@ -32,6 +35,18 @@ namespace PageTest
             indexPage.BP.Diastolic = 90;
             indexPage.OnPost();
             Assert.IsFalse(indexPage.ModelState.IsValid);
+
+            //Program test
+            var hostBuilder = Program.CreateHostBuilder(Array.Empty<string>());
+            using var host = hostBuilder.Build();
+            host.Start();
+            host.StopAsync().Wait();
+
+            //Startup test
+            using var nhost = Host.CreateDefaultBuilder().ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); }).Build();
+            nhost.Start();
+            nhost.StopAsync().Wait();
+
         }
     }
 }
